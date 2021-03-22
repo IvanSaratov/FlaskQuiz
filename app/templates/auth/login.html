@@ -4,21 +4,17 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <div class="card">
-                    <form onsubmit="event.preventDefault()" class="box">
-                        <h1>Login</h1>
-                        <p class="text-muted"> Please enter your login and password!</p>
-                        <input type="text" name="" placeholder="Username">
-                        <input type="password" name="" placeholder="Password">
-                        <a class="forgot text-muted" href="#">Forgot password?</a>
-                        <input type="submit" name="" value="Login" href="#">
-                    </form>
-                </div>
+                <form action="{{ url_for('auth.login') }}" method="post" role="form" class="box">
+                    <h1>Вход</h1>
+                    {{ form.hidden_tag() }}
+                    <input type="text" name="username" placeholder="Имя" class="input_field">
+                    <input type="password" name="password" placeholder="Пароль" class="input_field">
+                    <input type="submit" name="submit" value="Войти" class="input_submit">
+                    <a class="forgot text-muted"
+                       href="{{ url_for('auth.registration') }}"
+                       style="text-decoration: underline">Зарегестрироваться</a>
+                </form>
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block app_styles %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/login.css') }}">
 {% endblock %}

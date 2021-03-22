@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <form action="{{ url_for('auth.registration') }}" method="post" class="box" role="form">
+                    <h1>Регистрация</h1>
+                    {{ form.hidden_tag() }}
+                    <input type="text" name="username" placeholder="Логин" class="input_field">
+                    <input type="password" name="password" placeholder="Пароль" class="input_field">
+                    <input type="password" name="password_check" placeholder="Подтверждение" class="input_field">
+                    <input type="email" name="email" placeholder="Почта" class="input_field">
+                    <input type="text" name="first_name" placeholder="Имя" class="input_field">
+                    <input type="text" name="last_name" placeholder="Фамилия" class="input_field">
+                    <input type="submit" name="submit" value="Зарегестрироваться" class="input_submit">
+                    <a href="{{ url_for('auth.login') }}" class="forgot text-muted" style="text-decoration: underline">Назад</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
