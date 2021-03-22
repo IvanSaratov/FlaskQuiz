@@ -8,8 +8,9 @@
                     <h1>Quiz!</h1>
                     <h4 style="text-decoration: underline">С
                         возвращением {{ current_user.first_name + " " + current_user.last_name }}</h4>
-                    <a href="#" class="box-button">Играем? <i class="fas fa-play"></i></a>
-                    <a href="#" class="box-button">Таблица результатов <i class="fas fa-list"></i></a>
+                    <a href="{{ url_for('main.list') }}" class="box-button">Играем? <i class="fas fa-play"></i></a>
+                    <a href="{{ url_for('main.rating') }}" class="box-button">Таблица результатов <i
+                            class="fas fa-list"></i></a>
                     <a href="{{ url_for('auth.logout') }}" class="box-button">Выход <i class="fas fa-sign-out-alt"></i></a>
                 </div>
             </div>

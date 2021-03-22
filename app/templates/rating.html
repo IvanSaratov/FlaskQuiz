@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box">
+                    <h1>Результаты</h1>
+                    <br>
+                    <table class="table table-striped table-hover">
+                        <thead style="background: silver">
+                        <tr>
+                            <th>Позиция</th>
+                            <th>Игрок</th>
+                            <th>Счет</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ user.first_name + " " + user.last_name }}</td>
+                                <td>{{ user.rating }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="{{ url_for('main.index') }}" class="forgot text-muted" style="text-decoration: underline">Назад</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
