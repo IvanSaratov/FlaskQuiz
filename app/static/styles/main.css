@@ -14,7 +14,7 @@ body {
     background: #191919;;
     text-align: center;
     transition: 0.25s;
-    margin-top: 100px
+    margin-top: 20%;
 }
 
 .box .input_field {
@@ -43,8 +43,7 @@ body {
     border-color: #2ecc71
 }
 
-.box .input_submit {
-    border: 0;
+.box .box-button {
     background: none;
     display: block;
     margin: 20px auto;
@@ -58,6 +57,6 @@ body {
     cursor: pointer
 }
 
-.box .input_submit:hover {
+.box .box-button:hover {
     background: #2ecc71
 }
