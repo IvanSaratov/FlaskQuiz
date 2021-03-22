@@ -23,23 +23,14 @@ class Question(db.Model):
     question = db.Column(db.String(256), nullable=False)
     type = db.Column(db.Enum(Type))
     answers = db.relationship("Answers")
-    quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'))
+    quiz_id = db.Column(db.Integer, db.ForeignKey(Quiz.id))
 
 
 class Answers(db.Model):
-    quest_id = db.Column(db.Integer, db.ForeignKey('question.id'))
-
-
-class Progress(db.Model):
-    user_id = db.Column(db.Integer, nullable=False)
+    id = db.Column(db.Integer, db.ForeignKey(Question.id))
     question_id = db.Column(db.Integer, nullable=False)
-    progress = db.Column(db.Integer, nullable=False)
-
-
-association_progress_table = db.Table('association_progress_table',
-                                      db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-                                      db.Column('question_id', db.Integer, db.ForeignKey('question.id'))
-                                      )
+    answer = db.Column(db.String, nullable=False)
+    db.__table_args__ = (db.PrimaryKeyConstraint(id, question_id))
 
 
 class User(db.Model, UserMixin):
@@ -50,8 +41,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(128), index=True, unique=True)
     rating = db.Column(db.Integer, default=0)
-    progress = db.relationship('Progress', secondary=association_progress_table,
-                               backref=db.backref('progress', lazy='dynamic'))
+    progress = db.relationship("UserQuizProgress")
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -63,3 +53,13 @@ class User(db.Model, UserMixin):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
+class UserQuizProgress(db.Model):
+    db.__tablename__ = 'user_quiz'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    user = db.relationship(User)
+    quiz_id = db.Column(db.Integer, db.ForeignKey(Quiz.id))
+    quiz = db.relationship(Quiz)
+    progress = db.Column(db.Integer)
