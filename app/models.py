@@ -21,7 +21,7 @@ class Quiz(db.Model):
 class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     question = db.Column(db.String(256), nullable=False)
-    type = db.Column(Enum(Type))
+    type = db.Column(db.Enum(Type))
     answers = db.relationship("Answers")
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'))
 
