@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from app import db
 from app.main import bp
@@ -24,7 +24,8 @@ def rating():
 @login_required
 def list():
     quizs = Quiz.query.all()
-    return render_template('list.html', title='Список игр', quizs=quizs)
+    progress = UserQuizProgress.query.filter_by(user_id=current_user.id)
+    return render_template('list.html', title='Список игр', quizs=quizs, progress=progress)
 
 
 @bp.route('/reload')

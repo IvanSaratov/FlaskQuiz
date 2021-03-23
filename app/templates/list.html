@@ -19,7 +19,14 @@
                         {% for quiz in quizs %}
                             <tr>
                                 <td>{{ quiz.name }}</td>
-                                <td>1/2</td>
+                                <td>{% for p in progress if p.quiz_id == quiz.id %}
+                                    {% if p.progress %}
+                                        {{ p.progress }}
+                                    {% else %}
+                                        0
+                                    {% endif %}
+                                {% endfor %}
+                                    из {{ quiz.questions|length }}</td>
                                 <td><a href="#">Начать</a></td>
                             </tr>
                         {% endfor %}
