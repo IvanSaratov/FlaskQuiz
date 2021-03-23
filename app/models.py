@@ -13,13 +13,13 @@ class Type(Enum):
 
 
 class Quiz(db.Model):
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), index=True, unique=True, nullable=False)
     questions = db.relationship("Question")
 
 
 class Question(db.Model):
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(256), nullable=False)
     type = db.Column(db.Enum(Type))
     answers = db.relationship("Answers")
@@ -27,10 +27,9 @@ class Question(db.Model):
 
 
 class Answers(db.Model):
-    id = db.Column(db.Integer, db.ForeignKey(Question.id))
-    question_id = db.Column(db.Integer, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    question_id = db.Column(db.Integer, db.ForeignKey(Question.id))
     answer = db.Column(db.String, nullable=False)
-    db.__table_args__ = (db.PrimaryKeyConstraint(id, question_id))
 
 
 class User(db.Model, UserMixin):
