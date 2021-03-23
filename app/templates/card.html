@@ -1,5 +1,26 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box">
+                    <h2>{{ question.question }}</h2>
+                    {% for a in question.answers %}
+                        {% if question.type.name == "RADIO" %}
+                            <input type="radio" name="radio" value="{{ a.id }}"
+                                   id="{{ question.type.name }}{{ a.id }}">
+                            <label for="{{ question.type.name }}{{ a.id }}"><h4>{{ a.answer }}</h4></label>
+                        {% elif question.type.name == "CHECKBOX" %}
+                            <input type="checkbox" value="{{ a.id }}" id="{{ question.type.name }}{{ a.id }}">
+                            <label for="{{ question.type.name }}{{ a.id }}"><h4>{{ a.answer }}</h4></label>
+                        {% elif question.type.name == "TEXTFIELD" %}
+                            <input type="text" id="{{ question.type.name }}{{ a.id }}">
+                        {% endif %}
+                        <br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

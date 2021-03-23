@@ -28,6 +28,13 @@ def list():
     return render_template('list.html', title='Список игр', quizs=quizs, progress=progress)
 
 
+@bp.route('/card/<int:quiz_id>/<int:question_id>')
+@login_required
+def card(quiz_id, question_id):
+    quiz = Quiz.query.filter_by(id=quiz_id).first()
+    return render_template('card.html', title='Играем!', question=quiz.questions[question_id])
+
+
 @bp.route('/reload')
 @login_required
 def reload():
