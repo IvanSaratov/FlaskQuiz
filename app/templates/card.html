@@ -6,35 +6,36 @@
             <div class="col-md-6">
                 <div class="box">
                     <h2>{{ question.question }}</h2>
-                    {% for a in question.answers %}
-                        {% if question.type.name == "RADIO" %}
-                            <input type="radio" name="radio" value="{{ a.id }}"
-                                   id="{{ question.type.name }}{{ a.id }}">
-                            <label for="{{ question.type.name }}{{ a.id }}"><h4>{{ a.answer }}</h4></label>
-                        {% elif question.type.name == "CHECKBOX" %}
-                            <input type="checkbox" value="{{ a.id }}" id="{{ question.type.name }}{{ a.id }}">
-                            <label for="{{ question.type.name }}{{ a.id }}"><h4>{{ a.answer }}</h4></label>
-                        {% elif question.type.name == "TEXTFIELD" %}
-                            <input type="text" id="{{ question.type.name }}{{ a.id }}">
-                        {% endif %}
-                        <br>
-                    {% endfor %}
-                    <nav>
-                        <ul class="pager">
-                            <li class="previous" style="background: green">
-                                <a href="{{ url_for('main.list') }}">Выход</a>
-                            </li>
-                            <li class="next">
-                                {% if next_url %}
-                                    <a href="{{ next_url or '#' }}">
-                                        Следующий вопрос<span aria-hidden="true">&rarr;</span>
-                                    </a>
-                                {% else %}
-                                    <a href="{{ url_for('main.list') }}">Закончить тест</a>
-                                {% endif %}
-                            </li>
-                        </ul>
-                    </nav>
+                    <form action="{{ url_for('main.card', quiz_id=question.quiz_id, question_id=question.id) }}"
+                          method="post" role="form">
+                        {% for a in question.answers %}
+                            {% if question.type.name == "RADIO" %}
+                                <input type="radio" name="radio" value="{{ a.id }}"
+                                       id="{{ question.type.name }}{{ a.id }}">
+                                <label for="{{ question.type.name }}{{ a.id }}"><h4>{{ a.answer }}</h4></label>
+                            {% elif question.type.name == "CHECKBOX" %}
+                                <input type="checkbox" value="{{ a.id }}" id="{{ question.type.name }}{{ a.id }}">
+                                <label for="{{ question.type.name }}{{ a.id }}"><h4>{{ a.answer }}</h4></label>
+                            {% elif question.type.name == "TEXTFIELD" %}
+                                <input type="text" id="{{ question.type.name }}{{ a.id }}">
+                            {% endif %}
+                            <br>
+                        {% endfor %}
+                        <nav>
+                            <ul class="pager">
+                                <li class="previous" style="background: green">
+                                    <a href="{{ url_for('main.list') }}">Выход</a>
+                                </li>
+                                <li class="next">
+                                    {% if next_url %}
+                                        <input type="submit" name="submit" value="Дальше">
+                                    {% else %}
+                                        <a href="{{ url_for('main.list') }}">Закончить тест</a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </nav>
+                    </form>
                 </div>
             </div>
         </div>

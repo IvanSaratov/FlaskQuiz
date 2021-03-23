@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 
 from app import db
@@ -28,11 +28,25 @@ def list():
     return render_template('list.html', title='Список игр', quizs=quizs, progress=progress)
 
 
-@bp.route('/card/<int:quiz_id>/<int:question_id>')
+@bp.route('/card/<int:quiz_id>/<int:question_id>', methods=['GET', 'POST'])
 @login_required
 def card(quiz_id, question_id):
     quiz = Quiz.query.filter_by(id=quiz_id).first()
-    return render_template('card.html', title='Играем!', question=quiz.questions[question_id])
+    p = UserQuizProgress.query.filter_by(user_id=current_user.id, quiz_id=quiz.id).first()
+    if p is None:
+        p = UserQuizProgress(user=current_user, quiz=quiz, progress=0)
+        db.session.add(p)
+        db.session.commit()
+
+    if p.progress is -1:
+        flash('Опросник завершен')
+        redirect(url_for('main.list'))
+
+    if p.progress is not quiz.questions[-1]:
+        next_url = url_for('main.card', quiz_id=quiz_id, question_id=p.progress + 1)
+
+    #Получить ответ из формы и послать его дальше
+    return render_template('card.html', title='Играем!', question=quiz.questions[p.progress], next_url=next_url)
 
 
 @bp.route('/reload')

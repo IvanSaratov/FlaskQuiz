@@ -19,6 +19,7 @@
                         {% for quiz in quizs %}
                             <tr>
                                 <td>{{ quiz.name }}</td>
+                                {#                            Поправить тут направления#}
                                 <td>{% for p in progress if p.quiz_id == quiz.id %}
                                     {% if p.progress %}
                                         {{ p.progress }}
