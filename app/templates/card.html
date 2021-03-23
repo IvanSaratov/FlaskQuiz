@@ -19,6 +19,22 @@
                         {% endif %}
                         <br>
                     {% endfor %}
+                    <nav>
+                        <ul class="pager">
+                            <li class="previous" style="background: green">
+                                <a href="{{ url_for('main.list') }}">Выход</a>
+                            </li>
+                            <li class="next">
+                                {% if next_url %}
+                                    <a href="{{ next_url or '#' }}">
+                                        Следующий вопрос<span aria-hidden="true">&rarr;</span>
+                                    </a>
+                                {% else %}
+                                    <a href="{{ url_for('main.list') }}">Закончить тест</a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>

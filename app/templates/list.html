@@ -27,7 +27,7 @@
                                     {% endif %}
                                 {% endfor %}
                                     из {{ quiz.questions|length }}</td>
-                                <td><a href="#">Начать</a></td>
+                                <td><a href="{{ url_for('main.card', quiz_id=quiz.id, question_id=0) }}">Начать</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>
