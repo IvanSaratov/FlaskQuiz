@@ -52,18 +52,20 @@ def card(quiz_id, question_id):
     question = Question.query.get(p.progress)
 
     if request.method == 'POST':
-        trueAnswer = [str(x.id) for x in question.answers if x.isAnswer]
+        true_answer = [str(x.id) for x in question.answers if x.isAnswer]
 
         if question.type == Type.CHECKBOX:
             a = request.form.getlist('answer_check')
-            if set(a) == set(trueAnswer):
+            if set(a) == set(true_answer):
                 current_user.rating += 1
         elif question.type == Type.RADIO:
             a = request.form.get('answer_radio')
-            if a == str(trueAnswer.pop()):
+            if a == str(true_answer.pop()):
                 current_user.rating += 1
         elif question.type == Type.TEXTFIELD:
-            print()
+            a = request.form.get('answer_string')
+            if a == question.answers.pop().answer:
+                current_user.rating += 1
         else:
             flash('Неправильный тип')
             return redirect(url_for('main.card', quiz_id=quiz_id, question_id=p.progress))
