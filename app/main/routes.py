@@ -23,9 +23,17 @@ def rating():
 @bp.route('/quizs')
 @login_required
 def list():
+    class Prog:
+        comp_count = int
+        total_count = int
+
     quizs = Quiz.query.all()
     progress = UserQuizProgress.query.filter_by(user_id=current_user.id)
-    return render_template('list.html', title='Список игр', quizs=quizs, progress=progress)
+    prog = []
+    for quiz in quizs:
+        prog.append(Prog(comp_count=0, total_count=len(quiz.questions)))
+
+    return render_template('list.html', title='Список игр', quizs=quizs, progress=prog)
 
 
 @bp.route('/card/<int:quiz_id>/<int:question_id>', methods=['GET', 'POST'])
