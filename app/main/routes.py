@@ -34,22 +34,22 @@ def card(quiz_id, question_id):
     quiz = Quiz.query.filter_by(id=quiz_id).first()
     if quiz is None:
         flash('Такой игры не найдено')
-        redirect(url_for('main.list'))
+        return redirect(url_for('main.list'))
 
     p = UserQuizProgress.query.filter_by(user_id=current_user.id, quiz_id=quiz.id).first()
     if p is None:
-        p = UserQuizProgress(user=current_user, quiz=quiz, progress=1)
+        p = UserQuizProgress(user=current_user, quiz=quiz, progress=quiz.questions[0].id)
         db.session.add(p)
         db.session.commit()
 
-    if p.progress > len(quiz.questions):
+    if p.progress > quiz.questions[-1].id:
         flash('Опросник завершен')
-        redirect(url_for('main.list'))
+        return redirect(url_for('main.list'))
 
     if p.progress != question_id:
-        redirect(url_for('main.card', quiz_id=quiz_id, question_id=p.progress))
+        return redirect(url_for('main.card', quiz_id=quiz_id, question_id=p.progress))
 
-    question = [x for i, x in enumerate(quiz.questions) if i == p.progress - 1].pop()
+    question = Question.query.get(p.progress)
 
     if request.method == 'POST':
         trueAnswer = [str(x.id) for x in question.answers if x.isAnswer]
@@ -64,11 +64,18 @@ def card(quiz_id, question_id):
             print()
         else:
             flash('Неправильный тип')
-            redirect(url_for('main.card', quiz_id=quiz_id, question_id=p.progress))
+            return redirect(url_for('main.card', quiz_id=quiz_id, question_id=p.progress))
 
-        p.progress += 1
+        if p.progress == quiz.questions[-1].id:
+            p.progress += 1
+        else:
+            for i, x in enumerate(quiz.questions):
+                if x.id == p.progress:
+                    p.progress = quiz.questions[i + 1].id
+                    break
+
         db.session.commit()
-        redirect(url_for('main.card', quiz_id=quiz_id, question_id=p.progress))
+        return redirect(url_for('main.card', quiz_id=quiz_id, question_id=p.progress))
 
     return render_template('card.html', title='Играем!', question=question)
 
