@@ -59,7 +59,9 @@ def card(quiz_id, question_id):
             if set(a) == set(trueAnswer):
                 current_user.rating += 1
         elif question.type == Type.RADIO:
-            print()
+            a = request.form.get('answer_radio')
+            if a == str(trueAnswer.pop()):
+                current_user.rating += 1
         elif question.type == Type.TEXTFIELD:
             print()
         else:
