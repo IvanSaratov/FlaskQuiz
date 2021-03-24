@@ -21,21 +21,9 @@
                             {% endif %}
                             <br>
                         {% endfor %}
-                        <nav>
-                            <ul class="pager">
-                                <li class="previous" style="background: green">
-                                    <a href="{{ url_for('main.list') }}">Выход</a>
-                                </li>
-                                <li class="next">
-                                    {% if next_url %}
-                                        <input type="submit" name="submit" value="Дальше">
-                                    {% else %}
-                                        <a href="{{ url_for('main.list') }}">Закончить тест</a>
-                                    {% endif %}
-                                </li>
-                            </ul>
-                        </nav>
+                        <input type="submit" name="submit" value="Дальше" class="box-button">
                     </form>
+                    <a href="{{ url_for('main.list') }}" class="forgot text-muted" style="text-decoration: underline">Выход</a>
                 </div>
             </div>
         </div>
