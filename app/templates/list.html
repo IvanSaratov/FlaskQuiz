@@ -19,21 +19,14 @@
                         {% for quiz in quizs %}
                             <tr>
                                 <td>{{ quiz.name }}</td>
-                                {#                            Поправить тут направления#}
-                                <td>{% for p in progress if p.quiz_id == quiz.id %}
-                                    {% if p.progress %}
-                                        {{ p.progress }}
-                                    {% else %}
-                                        0
-                                    {% endif %}
-                                {% endfor %}
-                                    из {{ quiz.questions|length }}</td>
-                                <td><a href="{{ url_for('main.card', quiz_id=quiz.id, question_id=0) }}">Начать</a></td>
+                                <td>0 из {{ quiz.questions|length }}</td>
+                                <td><a href="{{ url_for('main.card', quiz_id=quiz.id, question_id=1) }}">Начать</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
-                    <a href="{{ url_for('main.index') }}" class="forgot text-muted" style="text-decoration: underline">Назад</a>
+                    <a href="{{ url_for('main.index') }}" class="forgot text-muted"
+                       style="text-decoration: underline">Назад</a>
                 </div>
             </div>
         </div>

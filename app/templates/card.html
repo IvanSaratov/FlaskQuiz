@@ -9,15 +9,19 @@
                     <form action="{{ url_for('main.card', quiz_id=question.quiz_id, question_id=question.id) }}"
                           method="post" role="form">
                         {% for a in question.answers %}
+                            {# Генерация radio button #}
                             {% if question.type.name == "RADIO" %}
-                                <input type="radio" name="radio" value="{{ a.id }}"
-                                       id="{{ question.type.name }}{{ a.id }}">
-                                <label for="{{ question.type.name }}{{ a.id }}"><h4>{{ a.answer }}</h4></label>
+                                <input type="radio" name="radio" value="{{ a.answer }}"
+                                       id="{{ question.type.name }}-{{ a.id }}">
+                                <label for="{{ question.type.name }}-{{ a.id }}"><h4>{{ a.answer }}</h4></label>
+                                {# Генерация checkbox#}
                             {% elif question.type.name == "CHECKBOX" %}
-                                <input type="checkbox" value="{{ a.id }}" id="{{ question.type.name }}{{ a.id }}">
-                                <label for="{{ question.type.name }}{{ a.id }}"><h4>{{ a.answer }}</h4></label>
+                                <input type="checkbox" name="answer_check" value="{{ a.id }}"
+                                       id="{{ question.type.name }}-{{ a.id }}">
+                                <label for="{{ question.type.name }}-{{ a.id }}"><h4>{{ a.answer }}</h4></label>
+                                {# Генерация text #}
                             {% elif question.type.name == "TEXTFIELD" %}
-                                <input type="text" id="{{ question.type.name }}{{ a.id }}">
+                                <input type="text" name="answerString" id="{{ question.type.name }}{{ a.id }}">
                             {% endif %}
                             <br>
                         {% endfor %}

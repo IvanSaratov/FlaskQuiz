@@ -30,6 +30,7 @@ class Answers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question_id = db.Column(db.Integer, db.ForeignKey(Question.id))
     answer = db.Column(db.String, nullable=False)
+    isAnswer = db.Column(db.Boolean, default=False)
 
 
 class User(db.Model, UserMixin):
@@ -39,7 +40,7 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(64))
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(128), index=True, unique=True)
-    rating = db.Column(db.Integer, default=0)
+    rating = db.Column(db.Integer, default=1)
     progress = db.relationship("UserQuizProgress")
 
     def set_password(self, password):

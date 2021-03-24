@@ -32,21 +32,45 @@ def list():
 @login_required
 def card(quiz_id, question_id):
     quiz = Quiz.query.filter_by(id=quiz_id).first()
+    if quiz is None:
+        flash('Такой игры не найдено')
+        redirect(url_for('main.list'))
+
     p = UserQuizProgress.query.filter_by(user_id=current_user.id, quiz_id=quiz.id).first()
     if p is None:
-        p = UserQuizProgress(user=current_user, quiz=quiz, progress=0)
+        p = UserQuizProgress(user=current_user, quiz=quiz, progress=1)
         db.session.add(p)
         db.session.commit()
 
-    if p.progress is -1:
+    if p.progress > len(quiz.questions):
         flash('Опросник завершен')
         redirect(url_for('main.list'))
 
-    if p.progress is not quiz.questions[-1]:
-        next_url = url_for('main.card', quiz_id=quiz_id, question_id=p.progress + 1)
+    if p.progress != question_id:
+        redirect(url_for('main.card', quiz_id=quiz_id, question_id=p.progress))
 
-    #Получить ответ из формы и послать его дальше
-    return render_template('card.html', title='Играем!', question=quiz.questions[p.progress], next_url=next_url)
+    question = [x for i, x in enumerate(quiz.questions) if i == p.progress - 1].pop()
+
+    if request.method == 'POST':
+        trueAnswer = [str(x.id) for x in question.answers if x.isAnswer]
+
+        if question.type == Type.CHECKBOX:
+            a = request.form.getlist('answer_check')
+            if set(a) == set(trueAnswer):
+                current_user.rating += 1
+        elif question.type == Type.RADIO:
+            print()
+        elif question.type == Type.TEXTFIELD:
+            print()
+        else:
+            flash('Неправильный тип')
+            redirect(url_for('main.card', quiz_id=quiz_id, question_id=p.progress))
+
+        p.progress += 1
+        db.session.commit()
+        redirect(url_for('main.card', quiz_id=quiz_id, question_id=p.progress))
+
+    return render_template('card.html', title='Играем!', question=question)
 
 
 @bp.route('/reload')
@@ -59,9 +83,9 @@ def reload():
         db.session.query(Quiz).delete()
         User.query.update({User.rating: 0})
 
-        answers1 = [Answers(answer="Ответ 1"), Answers(answer="Ответ 2"), Answers(answer="Ответ 3")]
-        answers2 = [Answers(answer="Ответ 1"), Answers(answer="Ответ 2"), Answers(answer="Ответ 3")]
-        answers3 = [Answers(answer="test")]
+        answers1 = [Answers(answer="Ответ 1"), Answers(answer="Ответ 2", isAnswer=True), Answers(answer="Ответ 3")]
+        answers2 = [Answers(answer="Ответ 1"), Answers(answer="Ответ 2", isAnswer=True), Answers(answer="Ответ 3")]
+        answers3 = [Answers(answer="test", isAnswer=True)]
         questions = [Question(question="Вопрос 1", type=Type.CHECKBOX, answers=answers1),
                      Question(question="Вопрос 2", type=Type.RADIO, answers=answers2),
                      Question(question="Вопрос 3", type=Type.TEXTFIELD, answers=answers3)]
