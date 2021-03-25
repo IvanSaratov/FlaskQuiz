@@ -24,14 +24,20 @@ def rating():
 @login_required
 def list():
     class Prog:
-        comp_count = int
-        total_count = int
+        def __init__(self, id, com, total):
+            self.quiz_id = id
+            self.completed = com
+            self.total = total
 
     quizs = Quiz.query.all()
     progress = UserQuizProgress.query.filter_by(user_id=current_user.id)
     prog = []
     for quiz in quizs:
-        prog.append(Prog(comp_count=0, total_count=len(quiz.questions)))
+        a = [x.progress for x in progress if x.id == quiz.id]
+        if not a:
+            prog.append(Prog(quiz.id, 0, len(quiz.questions)))
+        else:
+            prog.append(Prog(quiz.id, a.pop() - 1, len(quiz.questions)))
 
     return render_template('list.html', title='Список игр', quizs=quizs, progress=prog)
 

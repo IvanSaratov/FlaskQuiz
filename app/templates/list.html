@@ -19,7 +19,9 @@
                         {% for quiz in quizs %}
                             <tr>
                                 <td>{{ quiz.name }}</td>
-                                <td>0 из {{ quiz.questions|length }}</td>
+                                {% for p in progress if p.quiz_id == quiz.id %}
+                                    <td> {{ p.completed }} из {{ p.total }}</td>
+                                {% endfor %}
                                 <td><a href="{{ url_for('main.card', quiz_id=quiz.id, question_id=1) }}">Начать</a></td>
                             </tr>
                         {% endfor %}
